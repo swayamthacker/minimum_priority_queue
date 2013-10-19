@@ -1,0 +1,176 @@
+#include <iostream>
+
+using namespace std;
+const int default_size = 12;
+class PQ
+{
+    public:
+    PQ();
+    bool isempty();
+    bool isfull();
+    int minimum();
+    int left(int);
+    int right(int);
+    int parent(int);
+    int extract_min();
+    void getarray();
+    void swap(int *,int *);
+    void minheap(int);
+    void insert(int);
+    void bubble(int,int);
+
+    private:
+    int array_size;
+    int heap_size;
+    int array[default_size];
+};
+
+PQ::PQ()
+{
+    heap_size = -1;
+    array_size = default_size;
+    for(int a = 0;a<array_size;a++)
+    {
+        array[a] = 0;
+    }
+    //in C++, 0 is a way to set ints to null.
+}
+
+bool PQ::isempty()
+{
+    return heap_size<0;
+}
+
+bool PQ::isfull()
+{
+    return heap_size>=array_size-1;
+}
+
+int PQ::minimum()
+{
+    return array[0];
+}
+
+int PQ::left(int i)
+{
+    return 2*i+1;
+}
+
+int PQ::right(int i)
+{
+    return 2*i+2;
+}
+
+int PQ::parent(int i)
+{
+    return (i-1)/2;
+}
+
+void PQ::swap(int* x,int *y)
+{
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void PQ::getarray()
+{   cout<<"The array arranged according to a min binary heap is: "<<endl;
+    for(int j = 0 ; j<array_size;j++)
+    {
+        cout<<array[j]<<" ";
+    }
+}
+//swap root and last items, reduce heap size by 1. Reheapify.stupid deletion
+int PQ::extract_min()
+{
+    int min = array[0];
+    if(isempty())
+    {
+      cout<<"There are no elements to extract"<<endl;
+      return 0;
+    }
+    else
+    {
+
+        array[0] = array[heap_size];
+        array[heap_size] = min;
+        heap_size--;
+        minheap(0);
+        return min;
+    }
+}
+
+//now trickle down to the right spot
+void PQ:: minheap(int index)
+{
+    int smallest  = index;
+    int l  = left(index);
+    int r = right(index);
+
+    if(l<=heap_size && array[l]<array[smallest])
+    {
+        smallest  = l;
+    }
+    if(r<=heap_size && array[r]<array[smallest])
+    {
+        smallest  = r;
+    }
+    if(smallest!=index)
+    {
+        swap(&array[index],&array[smallest]);
+        minheap(smallest);
+    }
+}
+
+//add element at the end and trickle up to the correct spot
+
+void PQ:: insert(int x)
+{
+    if(isfull())
+    {
+		 cout<<"The heap is full"<<endl;
+		 return;
+    }
+    else
+    {
+		 heap_size++;
+		 array[heap_size] = x;
+		 //as this is a min priority queue, if x is less than its parent, then swap with the
+		 // parent. this process will repeat until x gets to its correct spot in the heap.
+		 int store = heap_size;
+		 while(x<array[parent(store)]&&x>0)
+		 {
+		   swap(&array[parent(store)],&array[store]);
+		   int temp = parent(store);
+		   store  = temp;
+		 }
+     }
+}
+
+int main()
+{
+    PQ Q;
+   // int x[] = {6,5,3,1,8,7,2,4,9,12,10,11};
+    int x[] = {6,5,3,1,8,7,2,4};
+    int size = sizeof(x)/sizeof(x[0]);
+    cout<<"The initial array is:"<<endl;
+    for(int i=0;i<size;i++)
+    {
+        cout<<x[i]<<" ";
+    }
+    cout<<endl;
+    for(int i = 0;i<size;i++)
+    {
+        Q.insert(x[i]);
+    }
+
+    Q.getarray();
+
+    cout<<endl<<"The elements of the priority queue are: "<<endl;
+
+    for(int i = 0;i<size;i++)
+    {
+       cout<<Q.extract_min()<<" ";
+    }
+    return 0;
+}
