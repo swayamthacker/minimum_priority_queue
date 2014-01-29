@@ -17,7 +17,6 @@ class PQ
     void swap(int *,int *);
     void minheap(int);
     void insert(int);
-    void bubble(int,int);
 
     private:
     int array_size;
