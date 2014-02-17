@@ -79,7 +79,7 @@ void PQ::getarray()
         cout<<array[j]<<" ";
     }
 }
-//swap root and last items, reduce heap size by 1. Reheapify.stupid deletion
+//swap root and last items, reduce heap size by 1. Reheapify.
 int PQ::extract_min()
 {
     int min = array[0];
@@ -134,8 +134,8 @@ void PQ:: insert(int x)
     {
 		 heap_size++;
 		 array[heap_size] = x;
-		 //as this is a min priority queue, if x is less than its parent, then swap with the
-		 // parent. this process will repeat until x gets to its correct spot in the heap.
+		 //as this is a min priority queue, if x is less than its parent, then swap x with its 
+		 // parent. This process will repeat until x gets to its correct spot in the heap.
 		 int store = heap_size;
 		 while(x<array[parent(store)]&&x>0)
 		 {
